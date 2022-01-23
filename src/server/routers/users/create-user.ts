@@ -4,7 +4,13 @@ import { User } from "@prisma/client";
 import { prisma } from "libs/prisma";
 import * as bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
-import { AVATAR_BASE_URL, passwordRegex } from "constants/index";
+import {
+	AVATAR_BASE_URL,
+	EMAIL_VERIFICATION_SUBJECT,
+	passwordRegex,
+	VERIFICATION_BASE_URL
+} from "constants/index";
+import { sendMail } from "../../../utils/sendgrid";
 
 
 export const createUserInput = z.object( {
@@ -36,6 +42,15 @@ export const createUserResolver: ProcedureResolver<any, CreateUserInput, AuthRes
 			salt,
 			profilePic: `${ AVATAR_BASE_URL }/${ salt }.svg?radius=50`
 		}
+	} );
+
+	const emailVerificationHash = await bcrypt.genSalt( 15 );
+	await prisma.verificationToken.create( { data: { token: emailVerificationHash, userId: newUser.id } } );
+
+	await sendMail( {
+		to: newUser.email,
+		subject: EMAIL_VERIFICATION_SUBJECT,
+		text: `${ VERIFICATION_BASE_URL }?token=${ emailVerificationHash }`
 	} );
 
 	const token = jwt.sign(
