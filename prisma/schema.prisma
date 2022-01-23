@@ -14,7 +14,7 @@ model User {
     password        String
     salt            String                  @unique
     about           String                  @default("")
-    profilePic      String                  @default("")
+    profilePic      String
     verified        Boolean                 @default(false)
     tokens          VerificationToken[]
 }
