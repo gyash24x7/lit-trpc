@@ -12,5 +12,6 @@ export const verifyUserResolver: ProcedureResolver<any, string, { message: strin
 	}
 
 	await prisma.user.update( { where: { id: token.userId }, data: { verified: true } } );
+	await prisma.verificationToken.delete( { where: { token: input } } );
 	return { message: "User verified!" };
 };

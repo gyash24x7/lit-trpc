@@ -1,0 +1,1 @@
+export type Appearance = "primary" | "default" | "warning" | "danger" | "success" | "dark" | "subtle"
