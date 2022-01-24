@@ -7,6 +7,8 @@ export interface StackProps {
 	direction?: "horizontal" | "vertical";
 	spacing?: "tiny" | "small" | "medium" | "large";
 	children: ReactNode;
+	centered?: boolean;
+	className?: string;
 }
 
 function getValidChildren( children: ReactNode ) {
@@ -21,7 +23,11 @@ export function Stack( props: StackProps ) {
 		{ "w-20 h-20": props.spacing === "large" }
 	);
 	return (
-		<Flex direction={ props.direction === "vertical" ? "col" : "row" }>
+		<Flex
+			direction={ props.direction === "vertical" ? "col" : "row" }
+			justify={ props.centered ? "center" : "start" }
+			className={ props.className }
+		>
 			{ getValidChildren( props.children )
 				.map( child => (
 					<Fragment key={ child.key }>

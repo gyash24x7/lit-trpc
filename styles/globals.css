@@ -2,3 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 @tailwind screens;
+
+.king-yna-bg {
+    background: #1a2a6c;
+    background: -webkit-linear-gradient(to bottom, #fdbb2d, #b21f1f, #1a2a6c);
+    background: linear-gradient(to bottom, #fdbb2d, #b21f1f, #1a2a6c);
+}

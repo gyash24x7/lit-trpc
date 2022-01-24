@@ -33,11 +33,12 @@ export function Flex( props: FlexProps ) {
 		{ "items-start": props.align === "start" },
 		{ "items-end": props.align === "end" },
 		{ "items-baseline": props.align === "baseline" },
-		{ "items-stretch": props.align === "stretch" }
+		{ "items-stretch": props.align === "stretch" },
+		props.className
 	);
 
 	return (
-		<Box className={ flexClassnames + " " + props.className }>
+		<Box className={ flexClassnames }>
 			{ props.children }
 		</Box>
 	);
