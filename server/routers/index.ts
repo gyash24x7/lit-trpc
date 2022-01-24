@@ -1,5 +1,5 @@
 import * as trpc from "@trpc/server";
-import { usersRouter } from "./users";
+import { usersRouter } from "server/routers/users";
 
 export const appRouter = trpc.router().merge( usersRouter );
 

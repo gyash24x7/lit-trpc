@@ -1,6 +1,6 @@
 import classNames from "classnames";
-import Flex from "../flex/flex";
-import { Appearance } from "../utils/utils";
+import Flex from "components/flex/flex";
+import { Appearance } from "components/utils/utils";
 
 export interface SpinnerProps {
 	size?: "small" | "medium" | "large";

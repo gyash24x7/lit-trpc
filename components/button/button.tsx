@@ -1,7 +1,7 @@
 import classNames from "classnames";
-import { Appearance } from "../utils/utils";
+import { Appearance } from "components/utils/utils";
 import { IconType } from "react-icons";
-import Spinner from "../spinner/spinner";
+import Spinner from "components/spinner/spinner";
 
 
 export interface ButtonProps {

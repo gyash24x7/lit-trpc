@@ -1,6 +1,6 @@
-import Flex from "../flex/flex";
+import Flex from "components/flex/flex";
 import { Children, Fragment, isValidElement, ReactElement, ReactNode } from "react";
-import Box from "../box/box";
+import Box from "components/box/box";
 import classNames from "classnames";
 
 export interface StackProps {

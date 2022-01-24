@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { ReactNode } from "react";
-import Box from "../box/box";
+import Box from "components/box/box";
 
 export interface FlexProps {
 	justify?: "center" | "start" | "end" | "space-between" | "space-around" | "space-evenly";
@@ -11,7 +11,7 @@ export interface FlexProps {
 }
 
 export function Spacer() {
-	return <Box className = "flex-1" />;
+	return <Box className="flex-1"/>;
 }
 
 export function Flex( props: FlexProps ) {
@@ -37,7 +37,7 @@ export function Flex( props: FlexProps ) {
 	);
 
 	return (
-		<Box className = { flexClassnames + " " + props.className }>
+		<Box className={ flexClassnames + " " + props.className }>
 			{ props.children }
 		</Box>
 	);

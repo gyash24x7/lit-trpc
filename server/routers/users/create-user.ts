@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { ProcedureResolver } from "@trpc/server/src/internals/procedure";
-import { prisma } from "libs/prisma";
+import { prisma } from "prisma/prisma";
 import * as bcrypt from "bcryptjs";
 import {
 	AVATAR_BASE_URL,
@@ -8,7 +8,7 @@ import {
 	passwordRegex,
 	VERIFICATION_BASE_URL
 } from "utils/constants";
-import { sendMail } from "../../../utils/sendgrid";
+import { sendMail } from "utils/sendgrid";
 
 
 export const createUserInput = z.object( {

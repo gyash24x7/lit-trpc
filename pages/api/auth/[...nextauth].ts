@@ -1,7 +1,7 @@
 import { NextApiHandler } from "next";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { prisma } from "libs/prisma";
+import { prisma } from "prisma/prisma";
 import * as bcrypt from "bcryptjs";
 
 const authHandler: NextApiHandler = NextAuth( {
@@ -32,7 +32,7 @@ const authHandler: NextApiHandler = NextAuth( {
 
 				if ( !user.verified ) {
 					// TODO: throw not verified exception
-					return null
+					return null;
 				}
 
 				return user;

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { ProcedureResolver } from "@trpc/server/src/internals/procedure";
-import { prisma } from "libs/prisma";
+import { prisma } from "prisma/prisma";
 
 export const verifyUserInput = z.string().nonempty();
 
