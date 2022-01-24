@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import Flex, { Spacer } from "components/flex/flex";
 import Box from "components/box/box";
 import Button from "components/button/button";
@@ -6,24 +6,22 @@ import Stack from "components/stack/stack";
 import { TextInput } from "components/input/input";
 import { IoLockClosed, IoMail } from "react-icons/io5";
 import { FormEvent, useState } from "react";
-import { trpc } from "utils/trpc";
-import { useRouter } from "next/router";
 import Link from "next/link";
+import { ClientSafeProvider, getProviders, getSession, signIn } from "next-auth/react";
 
-const loginPage: NextPage = function () {
+interface LoginProps {
+	credentialsProvider?: ClientSafeProvider;
+}
+
+const loginPage: NextPage<LoginProps> = function ( { credentialsProvider } ) {
 	const [ email, setEmail ] = useState( "" );
 	const [ password, setPassword ] = useState( "" );
-	const { replace } = useRouter();
-
-	const { mutateAsync, isLoading, isError } = trpc.useMutation( [ "login" ], {
-		async onSuccess() {
-			await replace( "/" );
-		}
-	} );
+	const [ isLoading, setIsLoading ] = useState( false );
 
 	async function handleLogin( e: FormEvent ) {
 		e.preventDefault();
-		await mutateAsync( { email, password } );
+		setIsLoading( true );
+		await signIn( credentialsProvider?.id, { email, password } ).finally( () => setIsLoading( false ) );
 	}
 
 	return (
@@ -75,3 +73,15 @@ const loginPage: NextPage = function () {
 };
 
 export default loginPage;
+
+export const getServerSideProps: GetServerSideProps<LoginProps> = async function ( { req } ) {
+	const providers = await getProviders();
+	const credentialsProvider = providers?.credentials;
+
+	const session = await getSession( { req } );
+	if ( session ) {
+		return { redirect: { destination: "/", permanent: false } };
+	}
+
+	return { props: { credentialsProvider } };
+};

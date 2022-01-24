@@ -1,15 +1,13 @@
 import { z } from "zod";
 import { ProcedureResolver } from "@trpc/server/src/internals/procedure";
-import { User } from "@prisma/client";
 import { prisma } from "libs/prisma";
 import * as bcrypt from "bcryptjs";
-import * as jwt from "jsonwebtoken";
 import {
 	AVATAR_BASE_URL,
 	EMAIL_VERIFICATION_SUBJECT,
 	passwordRegex,
 	VERIFICATION_BASE_URL
-} from "constants/index";
+} from "utils/constants";
 import { sendMail } from "../../../utils/sendgrid";
 
 
@@ -21,12 +19,11 @@ export const createUserInput = z.object( {
 
 export type CreateUserInput = z.infer<typeof createUserInput>
 
-export type AuthResponse = {
-	user?: User
-	token?: string
+export type CreateUserResponse = {
+	message?: "User Created!"
 }
 
-export const createUserResolver: ProcedureResolver<any, CreateUserInput, AuthResponse> = async ( { input } ) => {
+export const createUserResolver: ProcedureResolver<any, CreateUserInput, CreateUserResponse> = async ( { input } ) => {
 	const existingUser = await prisma.user.findUnique( { where: { email: input.email } } );
 	if ( existingUser ) {
 		// TODO: throw conflict exception here
@@ -53,10 +50,5 @@ export const createUserResolver: ProcedureResolver<any, CreateUserInput, AuthRes
 		text: `${ VERIFICATION_BASE_URL }?token=${ emailVerificationHash }`
 	} );
 
-	const token = jwt.sign(
-		{ id: newUser.id },
-		process.env.JWT_SECRET!,
-		{ subject: newUser.id, expiresIn: "7d" }
-	);
-	return { user: newUser, token };
+	return { message: "User Created!" };
 };

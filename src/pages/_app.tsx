@@ -6,15 +6,20 @@ import "@fontsource/montserrat/600.css";
 
 import type { AppProps } from "next/app";
 import { withTRPC } from "@trpc/next";
-import type { AppRouter } from "../server/routers";
+import type { AppRouter } from "server/routers";
+import { SessionProvider } from "next-auth/react";
 
-function App( { Component, pageProps }: AppProps ) {
-	return <Component { ...pageProps } />;
-}
+const app = function ( { Component, pageProps: { session, ...pageProps } }: AppProps ) {
+	return (
+		<SessionProvider session={ session }>
+			<Component { ...pageProps } />
+		</SessionProvider>
+	);
+};
 
 export default withTRPC<AppRouter>( {
 	config( { ctx } ) {
 		return { url: "http://localhost:3000/api" };
 	},
 	ssr: true
-} )( App );
+} )( app );
