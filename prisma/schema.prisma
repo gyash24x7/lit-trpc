@@ -8,15 +8,17 @@ datasource db {
 }
 
 model User {
-    id              String                  @default(cuid()) @id
-    name            String
-    email           String                  @unique
-    password        String
-    salt            String                  @unique
-    about           String                  @default("")
-    profilePic      String
-    verified        Boolean                 @default(false)
-    tokens          VerificationToken[]
+    id                  String                  @default(cuid()) @id
+    name                String
+    email               String                  @unique
+    password            String
+    salt                String                  @unique
+    about               String                  @default("")
+    profilePic          String
+    verified            Boolean                 @default(false)
+
+    tokens              VerificationToken[]
+    litPlayerAliases    LitPlayer[]             @relation("LitPlayerAliases")
 }
 
 model VerificationToken {
@@ -59,6 +61,9 @@ model LitPlayer {
     id              String          @id @default(cuid())
     name            String
     hand            String[]
+
+    user            User            @relation("LitPlayerAliases", fields:[userId], references:[id])
+    userId          String
 
     team            LitTeam?        @relation("TeamPartOf", fields:[teamId], references:[id])
     teamId          String?

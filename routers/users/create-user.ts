@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { ProcedureResolver } from "@trpc/server/src/internals/procedure";
 import { prisma } from "prisma/prisma";
 import * as bcrypt from "bcryptjs";
 import {
@@ -9,6 +8,7 @@ import {
 	VERIFICATION_BASE_URL
 } from "utils/constants";
 import { sendMail } from "utils/sendgrid";
+import type { TrpcResolver } from "utils/trpc";
 
 
 export const createUserInput = z.object( {
@@ -23,7 +23,7 @@ export type CreateUserResponse = {
 	message?: "User Created!"
 }
 
-export const createUserResolver: ProcedureResolver<any, CreateUserInput, CreateUserResponse> = async ( { input } ) => {
+export const createUserResolver: TrpcResolver<CreateUserInput, CreateUserResponse> = async ( { input } ) => {
 	const existingUser = await prisma.user.findUnique( { where: { email: input.email } } );
 	if ( existingUser ) {
 		// TODO: throw conflict exception here

@@ -9,6 +9,12 @@ const authHandler: NextApiHandler = NextAuth( {
 	pages: {
 		signIn: "/login"
 	},
+	callbacks: {
+		session( { token, session } ) {
+			session.userId = token.sub;
+			return session;
+		}
+	},
 	secret: process.env.SECRET,
 	providers: [
 		CredentialsProvider( {
