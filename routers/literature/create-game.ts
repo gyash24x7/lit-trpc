@@ -10,14 +10,12 @@ export type CreateGameInput = z.infer<typeof createGameInput>
 
 export const createGameResolver: TrpcResolver<CreateGameInput, LitGame> = async ( { ctx, input } ) => {
 	const userId = ctx.session!.userId as string;
-	const firstPlayer = await prisma.litPlayer.create( { data: { name: input, userId } } );
+	const player = await prisma.litPlayer.create( { data: { name: input, userId } } );
 
-	return await prisma.litGame.create( {
+	return prisma.litGame.create( {
 		data: {
 			code: cuid.slug().toUpperCase(),
-			players: {
-				connect: [ { id: firstPlayer.id } ]
-			}
+			players: { connect: [ { id: player.id } ] }
 		}
 	} );
 };
