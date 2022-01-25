@@ -25,3 +25,84 @@ model VerificationToken {
     userId      String
     user        User        @relation(fields:[userId], references:[id], onDelete: Cascade)
 }
+
+enum LitGameStatus {
+    NOT_STARTED
+    PLAYERS_READY
+    TEAMS_CREATED
+    IN_PROGRESS
+    COMPLETED
+}
+
+enum LitMoveType {
+    ASK
+    DECLINED
+    GIVEN
+    TURN
+    CALL
+    CALL_SUCCESS
+    CALL_FAIL
+}
+
+model LitTeam {
+    id          String          @id @default(cuid())
+    name        String
+    players     LitPlayer[]     @relation("TeamPartOf")
+    score       Int             @default(0)
+
+    // Not going to use below fields but required for prisma
+    game        LitGame         @relation("TeamOfGame", fields:[gameId], references:[id])
+    gameId      String
+}
+
+model LitPlayer {
+    id              String          @id @default(cuid())
+    name            String
+    hand            String[]
+
+    team            LitTeam?        @relation("TeamPartOf", fields:[teamId], references:[id])
+    teamId          String?
+
+    turnMoves       LitMove[]       @relation("TurnPlayer")
+    askedFromMoves  LitMove[]       @relation("AskedFrom")
+    askedByMoves    LitMove[]       @relation("AskedBy")
+    gamesPartOf     LitGame[]       @relation("GamesPartOf")
+}
+
+model LitMove {
+    id                      String          @id @default(cuid())
+    type                    LitMoveType
+    description             String
+    askedFor                String?
+
+    turn                    LitPlayer?      @relation("TurnPlayer", fields:[turnId], references:[id])
+    turnId                  String?
+
+    askedFrom               LitPlayer?      @relation("AskedFrom", fields:[askedFromId], references:[id])
+    askedFromId             String?
+
+    askedBy                 LitPlayer?      @relation("AskedBy", fields:[askedById], references:[id])
+    askedById               String?
+
+    currentMoveOfGame       LitGame?        @relation("CurrentGameMove")
+    lastMoveOfGame          LitGame?        @relation("LastGameMove")
+    secondLastMoveOfGame    LitGame?        @relation("SecondLastGameMove")
+}
+
+model LitGame {
+    id                  String          @id @default(cuid())
+    code                String          @unique
+    status              LitGameStatus   @default(NOT_STARTED)
+
+    players             LitPlayer[]     @relation("GamesPartOf")
+    teams               LitTeam[]       @relation("TeamOfGame")
+
+    currentMove         LitMove?        @relation("CurrentGameMove", fields:[currentMoveId], references:[id])
+    currentMoveId       String?
+
+    lastMove            LitMove?        @relation("LastGameMove", fields:[lastMoveId], references:[id])
+    lastMoveId          String?
+
+    secondLastMove      LitMove?        @relation("SecondLastGameMove", fields:[secondLastMoveId], references:[id])
+    secondLastMoveId    String?
+}
