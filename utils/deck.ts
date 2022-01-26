@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export function shuffle<T>( array: T[] ) {
 	let arr = [ ...array ];
 	for ( let i = arr.length; i > 1; i-- ) {
@@ -34,18 +36,15 @@ export enum Suit {
 	DIAMONDS = "DIAMONDS"
 }
 
-export class GameCard {
-	rank: Rank;
-	suit: Suit;
+export const zodGameCard = z.object( {
+	rank: z.nativeEnum( Rank ),
+	suit: z.nativeEnum( Suit )
+} );
 
-	constructor( cardString: string ) {
-		this.rank = Rank[ cardString.split( " OF " )[ 0 ] as keyof typeof Rank ];
-		this.suit = Suit[ cardString.split( " OF " )[ 1 ] as keyof typeof Suit ];
-	}
+export type GameCard = z.infer<typeof zodGameCard>
 
-	getCardString() {
-		return this.rank + " OF " + this.suit;
-	}
+export function getCardString( card: GameCard ) {
+	return card.rank + " OF " + card.suit;
 }
 
 export class Deck {
@@ -108,6 +107,8 @@ export const RANKS: Rank[] = [
 	Rank.KING
 ];
 
-export const SORTED_DECK = SUITS.flatMap( ( suit ) =>
-	RANKS.map( ( rank ) => new GameCard( rank + " OF " + suit ) )
+export const SORTED_DECK: GameCard[] = SUITS.flatMap( ( suit ) =>
+	RANKS.map( ( rank ) => (
+		{ rank, suit }
+	) )
 );

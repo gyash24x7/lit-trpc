@@ -2,7 +2,7 @@ import { z } from "zod";
 import { LitGame, LitGameStatus, LitMoveType } from "@prisma/client";
 import { TrpcResolver } from "utils/trpc";
 import { prisma } from "prisma/prisma";
-import { Deck, Rank } from "utils/deck";
+import { Deck, getCardString, Rank } from "utils/deck";
 
 export const startGameInput = z.object( {
 	gameId: z.string().nonempty().cuid()
@@ -33,7 +33,7 @@ export const startGameResolver: TrpcResolver<StartGameInput, StartGameResponse> 
 		game.players.map(
 			( player, i ) => prisma.litPlayer.update( {
 				where: { id: player.id },
-				data: { hand: { set: hands[ i ].map( card => card.getCardString() ) } }
+				data: { hand: { set: hands[ i ].map( getCardString ) } }
 			} )
 		)
 	);
