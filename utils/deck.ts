@@ -36,6 +36,17 @@ export enum Suit {
 	DIAMONDS = "DIAMONDS"
 }
 
+export enum CardSet {
+	SMALL_DIAMONDS = "SMALL_DIAMONDS",
+	BIG_DIAMONDS = "BIG_DIAMONDS",
+	SMALL_HEARTS = "SMALL_HEARTS",
+	BIG_HEARTS = "BIG_HEARTS",
+	SMALL_SPADES = "SMALL_SPADES",
+	BIG_SPADES = "BIG_SPADES",
+	SMALL_CLUBS = "SMALL_CLUBS",
+	BIG_CLUBS = "BIG_CLUBS"
+}
+
 export const zodGameCard = z.object( {
 	rank: z.nativeEnum( Rank ),
 	suit: z.nativeEnum( Suit )
@@ -112,3 +123,59 @@ export const SORTED_DECK: GameCard[] = SUITS.flatMap( ( suit ) =>
 		{ rank, suit }
 	) )
 );
+
+export const cardSuitMap: Record<Suit, GameCard[]> = {
+	CLUBS: SORTED_DECK.filter( card => card.suit === Suit.CLUBS ),
+	SPADES: SORTED_DECK.filter( card => card.suit === Suit.SPADES ),
+	HEARTS: SORTED_DECK.filter( card => card.suit === Suit.HEARTS ),
+	DIAMONDS: SORTED_DECK.filter( card => card.suit === Suit.DIAMONDS )
+};
+
+export const cardSetMap: Record<CardSet, GameCard[]> = {
+	SMALL_CLUBS: splitArray( cardSuitMap.CLUBS.splice( 6, 1 ) )[ 0 ],
+	SMALL_SPADES: splitArray( cardSuitMap.SPADES.splice( 6, 1 ) )[ 0 ],
+	SMALL_DIAMONDS: splitArray( cardSuitMap.DIAMONDS.splice( 6, 1 ) )[ 0 ],
+	SMALL_HEARTS: splitArray( cardSuitMap.HEARTS.splice( 6, 1 ) )[ 0 ],
+	BIG_CLUBS: splitArray( cardSuitMap.CLUBS.splice( 6, 1 ) )[ 1 ],
+	BIG_SPADES: splitArray( cardSuitMap.SPADES.splice( 6, 1 ) )[ 1 ],
+	BIG_DIAMONDS: splitArray( cardSuitMap.DIAMONDS.splice( 6, 1 ) )[ 1 ],
+	BIG_HEARTS: splitArray( cardSuitMap.HEARTS.splice( 6, 1 ) )[ 1 ]
+};
+
+export function getCardSet( card: GameCard ): CardSet {
+	return CardSet[ (
+		RANKS.indexOf( card.rank ) < 6 ? "SMALL_" : "BIG_" + card.suit.toString()
+	) as keyof typeof CardSet ];
+
+}
+
+export function includesAll<T>( arr: T[], subset: T[] ) {
+	let flag = 0;
+	subset.forEach( entry => {
+		if ( arr.includes( entry ) ) {
+			flag++;
+		}
+	} );
+	return subset.length === flag;
+}
+
+export function includeSome<T>( arr: T[], subset: T[] ) {
+	let flag = 0;
+	subset.forEach( entry => {
+		if ( arr.includes( entry ) ) {
+			flag++;
+		}
+	} );
+
+	return flag > 0;
+}
+
+export function removeIfPresent<T>( arr: T[], subset: T[] ) {
+	const newArr: T[] = [];
+	subset.forEach( entry => {
+		if ( !arr.includes( entry ) ) {
+			newArr.push( entry );
+		}
+	} );
+	return newArr;
+}
