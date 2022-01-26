@@ -75,30 +75,30 @@ model LitPlayer {
 }
 
 model LitMove {
-    id                      String          @id @default(cuid())
-    type                    LitMoveType
-    askedFor                String?
+    id                String          @id @default(cuid())
+    type              LitMoveType
+    askedFor          String?
 
-    turn                    LitPlayer?      @relation("TurnPlayer", fields:[turnId], references:[id])
-    turnId                  String?
+    turn              LitPlayer?      @relation("TurnPlayer", fields:[turnId], references:[id])
+    turnId            String?
 
-    askedFrom               LitPlayer?      @relation("AskedFrom", fields:[askedFromId], references:[id])
-    askedFromId             String?
+    askedFrom         LitPlayer?      @relation("AskedFrom", fields:[askedFromId], references:[id])
+    askedFromId       String?
 
-    askedBy                 LitPlayer?      @relation("AskedBy", fields:[askedById], references:[id])
-    askedById               String?
+    askedBy           LitPlayer?      @relation("AskedBy", fields:[askedById], references:[id])
+    askedById         String?
 
-    game                    LitGame         @relation("GameMoves", fields:[gameId], references:[id])
-    gameId                  String
+    game              LitGame         @relation("GameMoves", fields:[gameId], references:[id])
+    gameId            String
 }
 
 model LitGame {
-    id                  String          @id @default(cuid())
-    code                String          @unique
-    status              LitGameStatus   @default(NOT_STARTED)
+    id            String          @id @default(cuid())
+    code          String          @unique
+    status        LitGameStatus   @default(NOT_STARTED)
 
-    players             LitPlayer[]     @relation("GamesPartOf")
-    teams               LitTeam[]       @relation("TeamOfGame")
+    players       LitPlayer[]     @relation("GamesPartOf")
+    teams         LitTeam[]       @relation("TeamOfGame")
 
-    moves               LitMove[]       @relation("GameMoves")
+    moves         LitMove[]       @relation("GameMoves")
 }

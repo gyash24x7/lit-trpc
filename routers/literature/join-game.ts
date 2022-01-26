@@ -14,7 +14,6 @@ export type JoinGameResponse = { error: string } | LitGame
 
 export const joinGameResolver: TrpcResolver<JoinGameInput, JoinGameResponse> = async ( { ctx, input } ) => {
 	const userId = ctx.session?.userId! as string;
-	const player = await prisma.litPlayer.create( { data: { name: input.name, userId } } );
 
 	const game = await prisma.litGame.findUnique( {
 		where: { code: input.code },
@@ -30,6 +29,14 @@ export const joinGameResolver: TrpcResolver<JoinGameInput, JoinGameResponse> = a
 		// TODO: handle error better
 		return { error: "Game already has 6 players. Cannot join!" };
 	}
+
+	const userAlreadyInGame = !!game.players.find( player => player.userId === userId );
+	if ( userAlreadyInGame ) {
+		// TODO: handle same user joining multiple times
+		return { error: "You have already joined the game!" };
+	}
+
+	const player = await prisma.litPlayer.create( { data: { name: input.name, userId } } );
 
 	return prisma.litGame.update( {
 		where: { id: game.id },
