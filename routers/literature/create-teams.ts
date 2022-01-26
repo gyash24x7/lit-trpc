@@ -12,8 +12,7 @@ export type CreateTeamsInput = z.infer<typeof createTeamsInput>
 
 export type CreateTeamsResponse = { error: string } | LitGame
 
-export const createTeamsResolver: TrpcResolver<CreateTeamsInput, CreateTeamsResponse> = async ( opts ) => {
-	const { input } = opts;
+export const createTeamsResolver: TrpcResolver<CreateTeamsInput, CreateTeamsResponse> = async ( { input } ) => {
 	const game = await prisma.litGame.findUnique( {
 		where: { id: input.gameId },
 		include: { players: true }
@@ -29,7 +28,7 @@ export const createTeamsResolver: TrpcResolver<CreateTeamsInput, CreateTeamsResp
 		return { error: "A game needs to have 6 players. Not enough players!" };
 	}
 
-	return await prisma.litGame.update( {
+	return prisma.litGame.update( {
 		where: { id: input.gameId },
 		data: {
 			teams: {

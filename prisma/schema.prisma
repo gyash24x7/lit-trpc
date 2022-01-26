@@ -89,9 +89,8 @@ model LitMove {
     askedBy                 LitPlayer?      @relation("AskedBy", fields:[askedById], references:[id])
     askedById               String?
 
-    currentMoveOfGame       LitGame?        @relation("CurrentGameMove")
-    lastMoveOfGame          LitGame?        @relation("LastGameMove")
-    secondLastMoveOfGame    LitGame?        @relation("SecondLastGameMove")
+    game                    LitGame         @relation("GameMoves", fields:[gameId], references:[id])
+    gameId                  String
 }
 
 model LitGame {
@@ -102,12 +101,5 @@ model LitGame {
     players             LitPlayer[]     @relation("GamesPartOf")
     teams               LitTeam[]       @relation("TeamOfGame")
 
-    currentMove         LitMove?        @relation("CurrentGameMove", fields:[currentMoveId], references:[id])
-    currentMoveId       String?
-
-    lastMove            LitMove?        @relation("LastGameMove", fields:[lastMoveId], references:[id])
-    lastMoveId          String?
-
-    secondLastMove      LitMove?        @relation("SecondLastGameMove", fields:[secondLastMoveId], references:[id])
-    secondLastMoveId    String?
+    moves               LitMove[]       @relation("GameMoves")
 }

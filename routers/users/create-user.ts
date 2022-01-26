@@ -1,12 +1,7 @@
 import { z } from "zod";
 import { prisma } from "prisma/prisma";
 import * as bcrypt from "bcryptjs";
-import {
-	AVATAR_BASE_URL,
-	EMAIL_VERIFICATION_SUBJECT,
-	passwordRegex,
-	VERIFICATION_BASE_URL
-} from "utils/constants";
+import { AVATAR_BASE_URL, EMAIL_VERIFICATION_SUBJECT, passwordRegex, VERIFICATION_BASE_URL } from "utils/constants";
 import { sendMail } from "utils/sendgrid";
 import type { TrpcResolver } from "utils/trpc";
 
