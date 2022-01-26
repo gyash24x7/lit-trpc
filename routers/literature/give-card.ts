@@ -50,6 +50,6 @@ export const giveCardResolver: TrpcResolver<GiveCardInput, GiveCardResponse> = a
 
 	return prisma.litGame.update( {
 		where: { id: input.gameId },
-		data: { moves: { create: [ { type: LitMoveType.TURN, turn: takingPlayer } ] } }
+		data: { moves: { create: [ { type: LitMoveType.GIVEN, turn: takingPlayer } ] } }
 	} );
 };

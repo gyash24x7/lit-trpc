@@ -6,8 +6,10 @@ import { createTeamsInput, createTeamsResolver } from "routers/literature/create
 import { startGameInput, startGameResolver } from "routers/literature/start-game";
 import { askCardInput, askCardResolver } from "routers/literature/ask-card";
 import { giveCardInput, giveCardResolver } from "routers/literature/give-card";
+import { declineCardInput, declineCardResolver } from "routers/literature/decline-card";
 
 export const literatureRouter = trpc.router<TrpcContext>()
+	.mutation( "decline-card", { input: declineCardInput, resolve: declineCardResolver } )
 	.mutation( "give-card", { input: giveCardInput, resolve: giveCardResolver } )
 	.mutation( "ask-card", { input: askCardInput, resolve: askCardResolver } )
 	.mutation( "start-lit-game", { input: startGameInput, resolve: startGameResolver } )
