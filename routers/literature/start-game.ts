@@ -44,11 +44,7 @@ export const startGameResolver: TrpcResolver<StartGameInput, StartGameResponse> 
 			status: LitGameStatus.IN_PROGRESS,
 			moves: {
 				create: [
-					{
-						type: LitMoveType.TURN,
-						description: `${ game.players[ 0 ].name }' Turn`,
-						turn: game.players[ 0 ]
-					}
+					{ type: LitMoveType.TURN, turn: game.players[ 0 ] }
 				]
 			}
 		}

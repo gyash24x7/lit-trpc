@@ -77,7 +77,6 @@ model LitPlayer {
 model LitMove {
     id                      String          @id @default(cuid())
     type                    LitMoveType
-    description             String
     askedFor                String?
 
     turn                    LitPlayer?      @relation("TurnPlayer", fields:[turnId], references:[id])
