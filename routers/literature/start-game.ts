@@ -12,18 +12,24 @@ export type StartGameInput = z.infer<typeof startGameInput>
 
 export type StartGameResponse = { error: string } | LitGame
 
-export const startGameResolver: TrpcResolver<StartGameInput, StartGameResponse> = async ( { input } ) => {
+export const startGameResolver: TrpcResolver<StartGameInput, StartGameResponse> = async ( { input, ctx } ) => {
+	const loggedInUserId = ctx.session?.userId! as string;
+
 	const game = await prisma.litGame.findFirst( {
-		where: {
-			id: input.gameId,
-			status: LitGameStatus.TEAMS_CREATED
-		},
+		where: { id: input.gameId, status: LitGameStatus.TEAMS_CREATED },
 		include: { players: true }
 	} );
 
 	if ( !game ) {
 		// TODO: handle game not found
 		return { error: "Game not found!" };
+	}
+
+	const loggedInPlayer = game.players.find( player => player.userId === loggedInUserId );
+
+	if ( !loggedInPlayer ) {
+		// TODO: handle user not part of game
+		return { error: "You are not part of the game. Cannot perform action!" };
 	}
 
 	const deck = new Deck();

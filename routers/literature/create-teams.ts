@@ -12,7 +12,9 @@ export type CreateTeamsInput = z.infer<typeof createTeamsInput>
 
 export type CreateTeamsResponse = { error: string } | LitGame
 
-export const createTeamsResolver: TrpcResolver<CreateTeamsInput, CreateTeamsResponse> = async ( { input } ) => {
+export const createTeamsResolver: TrpcResolver<CreateTeamsInput, CreateTeamsResponse> = async ( { input, ctx } ) => {
+	const loggedInUserId = ctx.session?.userId! as string;
+
 	const game = await prisma.litGame.findUnique( {
 		where: { id: input.gameId },
 		include: { players: true }
@@ -21,6 +23,13 @@ export const createTeamsResolver: TrpcResolver<CreateTeamsInput, CreateTeamsResp
 	if ( !game ) {
 		// TODO: handle game not found
 		return { error: "Game not found!" };
+	}
+
+	const loggedInPlayer = game.players.find( player => player.userId === loggedInUserId );
+
+	if ( !loggedInPlayer ) {
+		// TODO: handle user not part of game
+		return { error: "You are not part of the game. Cannot perform action!" };
 	}
 
 	if ( game.players.length !== 6 ) {
