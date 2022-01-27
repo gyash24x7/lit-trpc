@@ -10,7 +10,7 @@ export interface ButtonProps {
 	iconAfter?: IconType;
 	buttonText?: string;
 	appearance?: Appearance;
-	onClick?: () => void | Promise<void>;
+	onClick?: () => any | Promise<any>;
 	isLoading?: boolean;
 	variant?: "default" | "subtle";
 }

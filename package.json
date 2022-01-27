@@ -1,5 +1,5 @@
 {
-  "name": "stairway",
+  "name": "lit-trpc",
   "private": true,
   "scripts": {
     "dev": "next dev",
