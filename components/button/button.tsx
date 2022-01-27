@@ -3,7 +3,6 @@ import { Appearance } from "components/utils/utils";
 import { IconType } from "react-icons";
 import Spinner from "components/spinner/spinner";
 
-
 export interface ButtonProps {
 	type?: "submit" | "reset";
 	fullWidth?: boolean;
@@ -13,9 +12,10 @@ export interface ButtonProps {
 	appearance?: Appearance;
 	onClick?: () => void | Promise<void>;
 	isLoading?: boolean;
+	variant?: "default" | "subtle";
 }
 
-export function Button( { buttonText = "Submit", appearance = "default", ...props }: ButtonProps ) {
+export function Button( { buttonText, appearance = "default", ...props }: ButtonProps ) {
 	const buttonClassnames = classNames(
 		"inline-flex",
 		"justify-center",
@@ -43,7 +43,9 @@ export function Button( { buttonText = "Submit", appearance = "default", ...prop
 	);
 
 	const IconBefore = props.iconBefore;
+	const iconBeforeClassnames = classNames( "w-4", "h-4", { "mr-4": props.isLoading || !!buttonText } );
 	const IconAfter = props.iconAfter;
+	const iconAfterClassnames = classNames( "w-4", "h-4", { "ml-4": props.isLoading || !!buttonText } );
 
 	return (
 		<button
@@ -52,16 +54,20 @@ export function Button( { buttonText = "Submit", appearance = "default", ...prop
 			onClick={ props.onClick }
 		>
 
-			{ IconBefore!! && <IconBefore className={ classNames( "w-4", "h-4", "mr-4" ) }/> }
-			<span
-				className={ classNames(
-					{ "mr-1": IconBefore!! },
-					{ "ml-1": IconAfter!! }
-				) }
-			>
+			{ IconBefore!! && <IconBefore className={ iconBeforeClassnames }/> }
+			{ (
+				props.isLoading || !!buttonText
+			) && (
+				<span
+					className={ classNames(
+						{ "mr-1": IconBefore!! },
+						{ "ml-1": IconAfter!! }
+					) }
+				>
 				{ props.isLoading ? <Spinner/> : buttonText }
 			</span>
-			{ IconAfter!! && <IconAfter className={ classNames( "w-4", "h-4", "ml-4" ) }/> }
+			) }
+			{ IconAfter!! && <IconAfter className={ iconAfterClassnames }/> }
 		</button>
 	);
 }

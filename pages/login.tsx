@@ -55,6 +55,7 @@ const loginPage: NextPage<LoginProps> = function ( { credentialsProvider } ) {
 								fullWidth
 								appearance={ "primary" }
 								isLoading={ isLoading }
+								buttonText={ "Submit" }
 							/>
 							<Flex>
 								<p>Don't have an account?</p>

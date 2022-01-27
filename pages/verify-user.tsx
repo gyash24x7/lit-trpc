@@ -14,7 +14,7 @@ const verifyUserPage: NextPage = function () {
 	} );
 
 	useMount( async () => {
-		await mutateAsync( query.token as string );
+		await mutateAsync( { token: query.token as string } );
 	} );
 
 	return (

@@ -20,7 +20,7 @@ export function Card( props: CardProps ) {
 		<Box className={ wrapperClassNames }>
 			{ props.image && <Image src={ props.image } width={ 200 } height={ 200 }/> }
 			<h2 className={ "text-lg font-bold" }>{ props.title }</h2>
-			{ props.actions?.map( ( btnProps ) => <Button { ...btnProps }/> ) }
+			{ props.actions?.map( ( btnProps ) => <Button key={ btnProps.buttonText } { ...btnProps }/> ) }
 		</Box>
 	);
 }

@@ -15,7 +15,7 @@ interface SignUpProps {
 	credentialsProvider?: ClientSafeProvider;
 }
 
-const signUpPage: NextPage<SignUpProps> = function ( { credentialsProvider } ) {
+const signUpPage: NextPage<SignUpProps> = function () {
 	const [ name, setName ] = useState( "" );
 	const [ email, setEmail ] = useState( "" );
 	const [ password, setPassword ] = useState( "" );
@@ -70,6 +70,7 @@ const signUpPage: NextPage<SignUpProps> = function ( { credentialsProvider } ) {
 								fullWidth
 								appearance={ "primary" }
 								isLoading={ isLoading }
+								buttonText={ "Submit" }
 							/>
 							<Flex>
 								<p>Already have an account?</p>
