@@ -5,7 +5,8 @@ module.exports = {
     ],
     theme: {
         fontFamily: {
-            sans: ["Montserrat", "ui-sans-serif"]
+            sans: ["Montserrat", "ui-sans-serif"],
+            fjalla: "Fjalla One"
         },
         extend: {
             colors: {

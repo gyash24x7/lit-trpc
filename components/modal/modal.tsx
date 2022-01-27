@@ -43,7 +43,7 @@ export const Modal: FC<ModalProps> = function ( { isOpen, onClose, children, tit
 						leaveTo="opacity-0 scale-95"
 					>
 						<div
-							className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+							className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-lg">
 							{ title && (
 								<Dialog.Title as="h3" className="text-xl font-bold leading-6 mb-4">
 									{ title }

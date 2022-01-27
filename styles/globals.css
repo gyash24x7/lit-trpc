@@ -8,3 +8,8 @@
     background: -webkit-linear-gradient(to bottom, #fdbb2d, #b21f1f, #1a2a6c);
     background: linear-gradient(to bottom, #fdbb2d, #b21f1f, #1a2a6c);
 }
+
+.literature-bg {
+    background-image: url("/assets/literature-bg.jpeg");
+    background-size: cover;
+}

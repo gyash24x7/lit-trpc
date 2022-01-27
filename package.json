@@ -8,6 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fontsource/fjalla-one": "^4.5.1",
     "@fontsource/montserrat": "4.5.2",
     "@headlessui/react": "1.4.3",
     "@prisma/client": "3.8.1",

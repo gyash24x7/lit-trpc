@@ -10,8 +10,12 @@ export interface FlexProps {
 	className?: string;
 }
 
-export function Spacer() {
-	return <Box className="flex-1"/>;
+export interface SpacerProps {
+	minWidth?: number;
+}
+
+export function Spacer( { minWidth }: SpacerProps ) {
+	return <Box className="flex-1" style={ { minWidth: minWidth || "unset" } }/>;
 }
 
 export function Flex( props: FlexProps ) {
@@ -21,8 +25,6 @@ export function Flex( props: FlexProps ) {
 		{ "flex-row-reverse": props.direction === "row-reverse" },
 		{ "flex-col": props.direction === "col" },
 		{ "flex-col-reverse": props.direction === "col-reverse" },
-		{ "w-full": props.direction === "row" || props.direction === "row-reverse" },
-		{ "h-full": props.direction === "col" || props.direction === "col-reverse" },
 		{ "justify-start": props.justify === "start" },
 		{ "justify-center": props.justify === "center" },
 		{ "justify-end": props.justify === "end" },

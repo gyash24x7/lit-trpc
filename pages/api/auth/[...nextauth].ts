@@ -41,7 +41,7 @@ const authHandler: NextApiHandler = NextAuth( {
 					return null;
 				}
 
-				return user;
+				return { id: user.id, name: user.name, email: user.email, image: user.profilePic };
 			}
 		} )
 	]

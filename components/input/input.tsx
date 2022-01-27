@@ -50,7 +50,7 @@ export interface TextInputProps {
 	onChange?: ( value: string ) => void | Promise<void>;
 }
 
-export function TextInput( { type = "text", ...props }: TextInputProps ) {
+export function TextInput( { type, ...props }: TextInputProps ) {
 	const IconBefore = props.iconBefore;
 	const IconAfter = props.iconAfter;
 
@@ -83,7 +83,7 @@ export function TextInput( { type = "text", ...props }: TextInputProps ) {
 					/>
 				) }
 				<input
-					type={ type }
+					type={ type || "text" }
 					name={ props.name }
 					placeholder={ props.placeholder }
 					className={ classNames(

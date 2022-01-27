@@ -68,7 +68,7 @@ const loginPage: NextPage<LoginProps> = function ( { credentialsProvider } ) {
 					</form>
 				</Box>
 			</Flex>
-			<Box className="flex-1 h-screen bg-gradient-to-l from-dark to-primary"/>
+			<Box className="flex-1 h-screen literature-bg from-dark to-primary"/>
 		</Flex>
 	);
 };
