@@ -7,8 +7,17 @@ import { startGameInput, startGameResolver } from "routers/literature/start-game
 import { askCardInput, askCardResolver } from "routers/literature/ask-card";
 import { giveCardInput, giveCardResolver } from "routers/literature/give-card";
 import { declineCardInput, declineCardResolver } from "routers/literature/decline-card";
+import { getGameInput, getGameResolver } from "routers/literature/get-game";
+import { LitGame } from "@prisma/client";
+import { callSetInput, callSetResolver } from "routers/literature/call-set";
+import { transferTurnInput, transferTurnResolver } from "routers/literature/transfer-turn";
+
+export type GameResponse = { error: string } | LitGame
 
 export const literatureRouter = trpc.router<TrpcContext>()
+	.query( "get-game", { input: getGameInput, resolve: getGameResolver } )
+	.mutation( "transfer-turn", { input: transferTurnInput, resolve: transferTurnResolver } )
+	.mutation( "call-set", { input: callSetInput, resolve: callSetResolver } )
 	.mutation( "decline-card", { input: declineCardInput, resolve: declineCardResolver } )
 	.mutation( "give-card", { input: giveCardInput, resolve: giveCardResolver } )
 	.mutation( "ask-card", { input: askCardInput, resolve: askCardResolver } )

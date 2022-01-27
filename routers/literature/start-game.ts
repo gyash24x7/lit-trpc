@@ -1,8 +1,9 @@
 import { z } from "zod";
-import { LitGame, LitGameStatus, LitMoveType } from "@prisma/client";
+import { LitGameStatus, LitMoveType } from "@prisma/client";
 import { TrpcResolver } from "utils/trpc";
 import { prisma } from "prisma/prisma";
 import { Deck, getCardString, Rank } from "utils/deck";
+import { GameResponse } from "routers/literature/index";
 
 export const startGameInput = z.object( {
 	gameId: z.string().nonempty().cuid()
@@ -10,9 +11,7 @@ export const startGameInput = z.object( {
 
 export type StartGameInput = z.infer<typeof startGameInput>
 
-export type StartGameResponse = { error: string } | LitGame
-
-export const startGameResolver: TrpcResolver<StartGameInput, StartGameResponse> = async ( { input, ctx } ) => {
+export const startGameResolver: TrpcResolver<StartGameInput, GameResponse> = async ( { input, ctx } ) => {
 	const loggedInUserId = ctx.session?.userId! as string;
 
 	const game = await prisma.litGame.findFirst( {
@@ -21,14 +20,12 @@ export const startGameResolver: TrpcResolver<StartGameInput, StartGameResponse> 
 	} );
 
 	if ( !game ) {
-		// TODO: handle game not found
 		return { error: "Game not found!" };
 	}
 
 	const loggedInPlayer = game.players.find( player => player.userId === loggedInUserId );
 
 	if ( !loggedInPlayer ) {
-		// TODO: handle user not part of game
 		return { error: "You are not part of the game. Cannot perform action!" };
 	}
 
@@ -48,11 +45,7 @@ export const startGameResolver: TrpcResolver<StartGameInput, StartGameResponse> 
 		where: { id: input.gameId },
 		data: {
 			status: LitGameStatus.IN_PROGRESS,
-			moves: {
-				create: [
-					{ type: LitMoveType.TURN, turn: game.players[ 0 ] }
-				]
-			}
+			moves: { create: [ { type: LitMoveType.TURN, turn: game.players[ 0 ] } ] }
 		}
 	} );
 };

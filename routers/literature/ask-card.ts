@@ -1,8 +1,9 @@
 import * as z from "zod";
 import { getCardString, zodGameCard } from "utils/deck";
 import { TrpcResolver } from "utils/trpc";
-import { LitGame, LitMoveType } from "@prisma/client";
+import { LitMoveType } from "@prisma/client";
 import { prisma } from "prisma/prisma";
+import { GameResponse } from "routers/literature";
 
 export const askCardInput = z.object( {
 	gameId: z.string().nonempty().cuid(),
@@ -12,9 +13,7 @@ export const askCardInput = z.object( {
 
 export type AskCardInput = z.infer<typeof askCardInput>
 
-export type AskCardResponse = { error: string } | LitGame
-
-export const askCardResolver: TrpcResolver<AskCardInput, AskCardResponse> = async ( { input, ctx } ) => {
+export const askCardResolver: TrpcResolver<AskCardInput, GameResponse> = async ( { input, ctx } ) => {
 	const loggedInUserId = ctx.session?.userId! as string;
 
 	const game = await prisma.litGame.findUnique( {
@@ -23,14 +22,12 @@ export const askCardResolver: TrpcResolver<AskCardInput, AskCardResponse> = asyn
 	} );
 
 	if ( !game ) {
-		// TODO: handle game not found
 		return { error: "Game Not Found!" };
 	}
 
 	const loggedInPlayer = game.players.find( player => player.userId === loggedInUserId );
 
 	if ( !loggedInPlayer ) {
-		// TODO: handle user not part of game
 		return { error: "You are not part of the game. Cannot perform action!" };
 	}
 
