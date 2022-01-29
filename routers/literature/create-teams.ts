@@ -32,7 +32,7 @@ export const createTeamsResolver: TrpcResolver<CreateTeamsInput, GameResponse> =
 		return { error: "A game needs to have 6 players. Not enough players!" };
 	}
 
-	return prisma.litGame.update( {
+	const updatedGame = await prisma.litGame.update( {
 		where: { id: input.gameId },
 		data: {
 			teams: {
@@ -45,4 +45,6 @@ export const createTeamsResolver: TrpcResolver<CreateTeamsInput, GameResponse> =
 			}
 		}
 	} );
+
+	return { data: game };
 };

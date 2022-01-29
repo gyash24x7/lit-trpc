@@ -45,15 +45,22 @@ export const transferTurnResolver: TrpcResolver<TransferTurnInput, GameResponse>
 	} );
 
 	if ( myTeamPlayersWithCards.length === 0 && otherTeamPlayersWithCards.length === 0 ) {
-		return prisma.litGame.update( { where: { id: input.gameId }, data: { status: LitGameStatus.COMPLETED } } );
+		const updatedGame = await prisma.litGame.update( {
+			where: { id: input.gameId },
+			data: { status: LitGameStatus.COMPLETED }
+		} );
+
+		return { data: updatedGame };
 	}
 
 	const nextPlayer = myTeamPlayersWithCards.length === 0
 		? otherTeamPlayersWithCards[ 0 ]
 		: myTeamPlayersWithCards[ 0 ];
 
-	return prisma.litGame.update( {
+	const updatedGame = await prisma.litGame.update( {
 		where: { id: input.gameId },
 		data: { moves: { create: [ { type: LitMoveType.TURN, turn: nextPlayer } ] } }
 	} );
+
+	return { data: updatedGame };
 };

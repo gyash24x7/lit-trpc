@@ -24,8 +24,10 @@ export type CallSetInput = z.infer<typeof callSetInput>
 
 export const callSetResolver: TrpcResolver<CallSetInput, GameResponse> = async ( { input, ctx } ) => {
 	const loggedInUserId = ctx.session?.userId! as string;
-
-	const game = await prisma.litGame.findUnique( { where: { id: input.gameId }, include: { players: true } } );
+	const game = await prisma.litGame.findUnique( {
+		where: { id: input.gameId },
+		include: { players: true }
+	} );
 
 	if ( !game ) {
 		return { error: "Game Not Found!" };
@@ -99,8 +101,10 @@ export const callSetResolver: TrpcResolver<CallSetInput, GameResponse> = async (
 		data: { hand: { set: removeIfPresent( player.hand, cardsCalled.map( getCardString ) ) } }
 	} ) ) );
 
-	return prisma.litGame.update( {
+	const updatedGame = await prisma.litGame.update( {
 		where: { id: input.gameId },
 		data: { moves: { create: [ moveData ] } }
 	} );
+
+	return { data: updatedGame };
 };

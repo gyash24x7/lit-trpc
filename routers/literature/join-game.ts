@@ -4,7 +4,7 @@ import { prisma } from "prisma/prisma";
 import { GameResponse } from "routers/literature/index";
 
 export const joinGameInput = z.object( {
-	code: z.string().cuid(),
+	code: z.string().length( 7 ),
 	name: z.string().nonempty()
 } );
 
@@ -22,8 +22,8 @@ export const joinGameResolver: TrpcResolver<JoinGameInput, GameResponse> = async
 		return { error: "Game not found!" };
 	}
 
-	if ( game.players.length >= 6 ) {
-		return { error: "Game already has 6 players. Cannot join!" };
+	if ( game.players.length >= game.playerCount ) {
+		return { error: `Game already has ${ game.playerCount } players. Cannot join!` };
 	}
 
 	const userAlreadyInGame = !!game.players.find( player => player.userId === userId );
@@ -33,8 +33,10 @@ export const joinGameResolver: TrpcResolver<JoinGameInput, GameResponse> = async
 
 	const player = await prisma.litPlayer.create( { data: { name: input.name, userId } } );
 
-	return prisma.litGame.update( {
+	const updatedGame = await prisma.litGame.update( {
 		where: { id: game.id },
 		data: { players: { connect: [ { id: player.id } ] } }
 	} );
+
+	return { data: updatedGame };
 };

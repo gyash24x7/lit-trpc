@@ -32,8 +32,10 @@ export const declineCardResolver: TrpcResolver<DeclineCardInput, GameResponse> =
 		return { error: "You cannot decline a card that you have!" };
 	}
 
-	return prisma.litGame.update( {
+	const updatedGame = await prisma.litGame.update( {
 		where: { id: input.gameId },
 		data: { moves: { create: [ { type: LitMoveType.DECLINED, turn: loggedInPlayer } ] } }
 	} );
+
+	return { data: updatedGame };
 };

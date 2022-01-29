@@ -5,10 +5,10 @@ import Stack from "components/stack/stack";
 import { CreateGame } from "components/app/CreateGame";
 import { useState } from "react";
 import Flex, { Spacer } from "components/flex/flex";
-import Image from "next/image";
 import Box from "components/box/box";
 import { UserCard } from "components/user-card/user-card";
 import { IoPower } from "react-icons/io5";
+import { JoinGame } from "components/app/JoinGame";
 
 type User = {
 	name?: string | null
@@ -26,7 +26,7 @@ const literatureHomePage: NextPage = function () {
 			<Box className={ "absolute w-screen h-screen literature-bg top-0 -z-10" }/>
 			<Stack direction={ "vertical" } className={ "items-center w-80" }>
 				<Box>
-					<Image src={ "/assets/literature-icon.png" } width={ 200 } height={ 200 }/>
+					<img alt="" src={ "/assets/literature-icon.png" } width={ 200 } height={ 200 }/>
 				</Box>
 				<h1 className={ "font-black text-6xl pb-10 text-center font-fjalla text-white" }>LITERATURE</h1>
 				<Button
@@ -35,14 +35,20 @@ const literatureHomePage: NextPage = function () {
 					fullWidth
 					onClick={ () => setIsCreateGameModalOpen( true ) }
 				/>
-				<Button buttonText={ "Join Game" } fullWidth onClick={ () => setIsJoinGameModalOpen( true ) }/>
-				<Button buttonText={ "Instructions" } fullWidth/>
+				<Button
+					buttonText={ "Join Game" }
+					appearance={ "warning" }
+					fullWidth
+					onClick={ () => setIsJoinGameModalOpen( true ) }
+				/>
+				<Button buttonText={ "Instructions" } fullWidth appearance={ "success" }/>
 				<Spacer/>
 				<UserCard user={ session?.user }/>
 				<Button iconBefore={ IoPower } buttonText={ "Logout" } appearance={ "danger" }
 						onClick={ () => signOut() }/>
 			</Stack>
 			<CreateGame isModalOpen={ isCreateGameModalOpen } closeModal={ () => setIsCreateGameModalOpen( false ) }/>
+			<JoinGame isModalOpen={ isJoinGameModalOpen } closeModal={ () => setIsJoinGameModalOpen( false ) }/>
 		</Flex>
 	);
 };

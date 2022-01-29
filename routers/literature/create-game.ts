@@ -14,10 +14,12 @@ export const createGameResolver: TrpcResolver<CreateGameInput, GameResponse> = a
 	const userId = ctx.session!.userId as string;
 	const player = await prisma.litPlayer.create( { data: { name: input.name, userId } } );
 
-	return prisma.litGame.create( {
+	const game = await prisma.litGame.create( {
 		data: {
 			code: cuid.slug().toUpperCase(),
 			players: { connect: [ { id: player.id } ] }
 		}
 	} );
+
+	return { data: game };
 };

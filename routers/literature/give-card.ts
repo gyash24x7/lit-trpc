@@ -44,8 +44,10 @@ export const giveCardResolver: TrpcResolver<GiveCardInput, GameResponse> = async
 		} )
 	] );
 
-	return prisma.litGame.update( {
+	const updatedGame = await prisma.litGame.update( {
 		where: { id: input.gameId },
 		data: { moves: { create: [ { type: LitMoveType.GIVEN, turn: takingPlayer } ] } }
 	} );
+
+	return { data: updatedGame };
 };

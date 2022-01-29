@@ -16,7 +16,7 @@ export const createContext = async ( { req, res }: CreateNextContextOptions ) =>
 export type TrpcContext = {
 	req: NextApiRequest
 	res: NextApiResponse
-	session?: Session
+	session?: Session | null
 }
 
 export type TrpcResolver<I = any, R = any> = ProcedureResolver<TrpcContext, I, R>

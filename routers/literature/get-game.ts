@@ -27,5 +27,5 @@ export const getGameResolver: TrpcResolver<GetGameInput, GameResponse> = async (
 		return { error: "You are not part of the game. Cannot perform action!" };
 	}
 
-	return game;
+	return { data: game };
 };

@@ -41,11 +41,13 @@ export const startGameResolver: TrpcResolver<StartGameInput, GameResponse> = asy
 		)
 	);
 
-	return prisma.litGame.update( {
+	const updatedGame = await prisma.litGame.update( {
 		where: { id: input.gameId },
 		data: {
 			status: LitGameStatus.IN_PROGRESS,
 			moves: { create: [ { type: LitMoveType.TURN, turn: game.players[ 0 ] } ] }
 		}
 	} );
+
+	return { data: updatedGame };
 };

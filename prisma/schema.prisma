@@ -96,6 +96,7 @@ model LitGame {
     id            String          @id @default(cuid())
     code          String          @unique
     status        LitGameStatus   @default(NOT_STARTED)
+    playerCount   Int             @default(2)
 
     players       LitPlayer[]     @relation("GamesPartOf")
     teams         LitTeam[]       @relation("TeamOfGame")

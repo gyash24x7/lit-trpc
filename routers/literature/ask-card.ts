@@ -31,7 +31,7 @@ export const askCardResolver: TrpcResolver<AskCardInput, GameResponse> = async (
 		return { error: "You are not part of the game. Cannot perform action!" };
 	}
 
-	return prisma.litGame.update( {
+	const updatedGame = await prisma.litGame.update( {
 		where: { id: input.gameId },
 		data: {
 			moves: {
@@ -46,4 +46,6 @@ export const askCardResolver: TrpcResolver<AskCardInput, GameResponse> = async (
 			}
 		}
 	} );
+
+	return { data: updatedGame };
 };

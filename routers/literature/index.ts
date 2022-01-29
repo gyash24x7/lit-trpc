@@ -12,7 +12,7 @@ import { LitGame } from "@prisma/client";
 import { callSetInput, callSetResolver } from "routers/literature/call-set";
 import { transferTurnInput, transferTurnResolver } from "routers/literature/transfer-turn";
 
-export type GameResponse = { error: string } | LitGame
+export type GameResponse = { error?: string, data?: LitGame }
 
 export const literatureRouter = trpc.router<TrpcContext>()
 	.query( "get-game", { input: getGameInput, resolve: getGameResolver } )
